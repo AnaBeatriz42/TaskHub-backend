@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Task = require('../model/tasks');
+const protect = require('../middleware/auth.mid')
 
-router.post('/tasks', async (req, res) => {
+router.post('/tasks', protect, async (req, res) => {
      try {
           const newTask = new Task({
                titulo: req.body.titulo,
@@ -19,7 +20,7 @@ router.post('/tasks', async (req, res) => {
      }
 });
 
-router.get('/tasks', async (req, res) => {
+router.get('/tasks', protect, async (req, res) => {
      try {
           const tasks = await Task.find();
           res.status(200).json(tasks);
@@ -29,7 +30,7 @@ router.get('/tasks', async (req, res) => {
      }
 });
 
-router.get('/tasks/:id', async (req, res) => {
+router.get('/tasks/:id', protect, async (req, res) => {
      try {
           const taskId = req.params.id;
           const task = await Task.findById(taskId);
@@ -43,7 +44,7 @@ router.get('/tasks/:id', async (req, res) => {
      }
 });
 
-router.put('/tasks/:id', async (req, res) => {
+router.put('/tasks/:id' , protect, async (req, res) => {
      try {
           const taskId = req.params.id;
           const updates = req.body;
@@ -61,13 +62,13 @@ router.put('/tasks/:id', async (req, res) => {
      }
 });
 
-router.get('/tasks/user/:id', async (req, res) => {
+router.get('/tasks/user/:id', protect, async (req, res) => {
      try {
           const userId = req.params.id;
 
           const tasks = await Task.find({ usuario: userId });
           res.status(200).json(tasks);
-          
+
      } catch (error) {
           console.error('Erro ao buscar tarefas por ID de usuário:', error);
           res.status(500).json({ error: 'Erro ao buscar tarefas por ID de usuário' });

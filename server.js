@@ -6,6 +6,7 @@ const db = require('./app.js');
 const mongoose = require('mongoose');
 const taskRouter = require('./Router/task.js');
 const userRouter = require('./Router/user.js');
+require("dotenv").config()
 
 app.use(cors({ origin: 'http://localhost:3000' }))
 
@@ -15,7 +16,7 @@ app.use('/api', taskRouter);
 
 app.use('/api', userRouter);
 
-app.get('/api/data', (req, res) => {
+app.get('/api', (req, res) => {
   res.json({ message: 'Hello from the Node.js server!' });
 });
 
